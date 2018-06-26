@@ -7,7 +7,7 @@ from os.path import isfile, join, basename, exists
 SAVE_FREQ = 600 # Default: save every 600 sec = 10 min
 TIME_ACTIVE = 3600 # Default: this "version control" will time out after 3600 sec = 1 hr
 VERSION_DIRNAME = "versions" # Default: folder containing version copies is called versions
-FILES_TO_EXCLUDE = ["README.md"] # Default: exclude readme
+FILES_TO_EXCLUDE = [] # Default: look you can add filenames to this!!
 
 def last_index_of(str, ch):
     for i in range(len(str) - 1, -1, -1):
