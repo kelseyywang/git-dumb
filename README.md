@@ -1,13 +1,13 @@
-# Dumb GitHub
+# git-dumb
 
-Does GitHub give you headaches, heartaches, and other bad feelings? Have you ever just wanted an incredibly inefficient and dumb version control system that just plops different versions of files in your local folder?
+Are you tired of people stereotyping you as smart just because you're a programmer? If so, it's time to **git dumb**.
 
-Me too!!!
+### Introducing git-dumb, one of my worse ideas.
 
-### Introducing Dumb GitHub, one of my worse ideas.
+It's a "version control" system that just backs up different versions of files onto your local machine. Great for use on sketchy hackathon projects, or when you're just feeling particularly dumb. ¯\\\_(ツ)\_/¯
 
 How to use:
 
-1.  Download this shit and put dumb_github.py in the same directory as the files you want to dumbly save.
-2.  Run python3 dumb_github.py (or something like that) in that same directory.
-3.  Enjoy!
+1.  Download this shit and put git-dumb.py in the same directory as the files you want to dumbly save.
+2.  Run python3 git-dumb.py (or something like that) in that same directory.
+3.  Modify files as you please. Enjoy!
