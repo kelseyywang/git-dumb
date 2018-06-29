@@ -2,23 +2,23 @@ import datetime
 import time
 import argparse
 from os import listdir, makedirs
-from os.path import isfile, join, basename, exists
+from os.path import isfile, join, basename, exists, isdir
 
 SAVE_FREQ = 600 # Time between saving different versions. Default: 10 min
 TIMEOUT = 3600 # Time until program automatically terminates. Default: 1 hr
 VERSION_DIRNAME = "versions" # Folder containing version copies
-FILES_TO_EXCLUDE = [] # File names to explicitly not copy. Default: none.
+FILES_TO_EXCLUDE = [] # File names of files to explicitly not copy. Default: none.
 IGNORES = [".gitignore"] # File names of files containing file names to explicitly not copy
 
-# To ignore the ignores in the ignore files
+# To ignore the ignores in the ignore files ;)
 def exclude_ignores():
-    # Ok why would you even have a gitignore because you're using git-dumb...? Whatever
     for ignore_file in IGNORES:
-        with open(ignore_file) as file:
-            for line in file:
-                line = line.strip()
-                if len(line) > 0 and line[0] != '#':
-                    FILES_TO_EXCLUDE.append(line)
+        if isfile(ignore_file):
+            with open(ignore_file) as file:
+                for line in file:
+                    line = line.strip()
+                    if len(line) > 0 and line[0] != '#':
+                        FILES_TO_EXCLUDE.append(line)
 
 # Args you can modify include save frequency, timeout amount, and version directory name
 def apply_args():
@@ -37,12 +37,6 @@ def apply_args():
         global VERSION_DIRNAME
         VERSION_DIRNAME = args.dir
 
-def last_index_of(str, ch):
-    for i in range(len(str) - 1, -1, -1):
-        if str[i] == ch:
-            return i
-    return -1
-
 def get_date_str():
     now = datetime.datetime.now()
     month, day, hour, minute, second = (str(now.month), str(now.day), str(now.hour), str(now.minute), str(now.second))
@@ -58,28 +52,41 @@ def get_date_str():
         second = "0" + second
     return str(now.year) + "-" + month + "-" + day + "_" + hour + "-" + minute + "-" + second
 
+def copy_stuff(directory):
+    date_str = get_date_str()
+    if not exists(join(VERSION_DIRNAME, date_str)):
+        makedirs(join(VERSION_DIRNAME, date_str))
+    this_filename = basename(__file__)
+    all_contents = listdir(directory)
+    file_list = []
+    dir_list = []
+    ignore_list = [] #TODO: print at end
+    for c in all_contents:
+        if isdir(join(directory, c)) and c[0] != '.' and c != VERSION_DIRNAME:
+            dir_list.append(c)
+        elif isfile(join(directory, c)) and c != this_filename and c not in FILES_TO_EXCLUDE and c[0] != '.':
+            file_list.append(c)
+        else:
+            ignore_list.append(c)
+    for filename in file_list:
+        now = datetime.datetime.now()
+        file = open(join(directory, filename), "r")
+        version_filename = join(VERSION_DIRNAME, date_str, directory, filename)
+        version_file = open(version_filename, "w+")
+        version_file.write(file.read())
+        file.close()
+        version_file.close()
+    for newdir in dir_list:
+        if not exists(join(VERSION_DIRNAME, date_str, directory, newdir)):
+            makedirs(join(VERSION_DIRNAME, date_str, directory, newdir))
+        copy_stuff(join(directory, newdir))
+
 def start_dumb_github():
     exclude_ignores()
     apply_args()
-    if not exists(VERSION_DIRNAME):
-        makedirs(VERSION_DIRNAME)
     start = time.time()
-    while time.time() - start < float(TIMEOUT):
-        this_filename = basename(__file__)
-        # Exclude certain - i.e. myself and hidden files
-        all_filenames = [f for f in listdir(".") if isfile(join(".", f)) and f != this_filename and f not in FILES_TO_EXCLUDE and f[0] != '.']
-        # Will go through all files contained in this directory. Sorry, you're
-        # screwed for now if you make any new directories and put stuff in them hehe
-        for filename in all_filenames:
-            now = datetime.datetime.now()
-            file = open(filename, "r")
-            orig_name = filename[0:last_index_of(filename, '.')]
-            orig_extension = filename[last_index_of(filename, '.'):]
-            version_filename = get_date_str() + "_" + orig_name + orig_extension
-            version_file = open(VERSION_DIRNAME + "/" + version_filename, "w+")
-            version_file.write(file.read())
-            file.close()
-            version_file.close()
+    while time.time() - start + float(SAVE_FREQ) <= float(TIMEOUT):
+        copy_stuff(".")
         time.sleep(int(SAVE_FREQ))
-
+        
 start_dumb_github()
