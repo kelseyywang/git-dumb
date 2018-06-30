@@ -23,9 +23,9 @@ def exclude_ignores():
 # Args you can modify include save frequency, timeout amount, and version directory name
 def apply_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--freq", help="Amount of time between saving new versions (in sec).")
-    parser.add_argument("--timeout", help="Amount of time to run until program times out (in sec).")
-    parser.add_argument("--dir", help="Name of directory where all versions are stored.")
+    parser.add_argument("--freq", help="Amount of time between saving new versions (in sec). Default: 600 (10 min)")
+    parser.add_argument("--timeout", help="Amount of time to run until git-dumb terminates (in sec). Default: 3600 (1 hr)")
+    parser.add_argument("--dir", help="Name of directory where all versions are stored. Default: \"versions\"")
     args = parser.parse_args()
     if args.freq:
         global SAVE_FREQ
@@ -88,5 +88,5 @@ def start_dumb_github():
     while time.time() - start + float(SAVE_FREQ) <= float(TIMEOUT):
         copy_stuff(".")
         time.sleep(int(SAVE_FREQ))
-        
+
 start_dumb_github()
