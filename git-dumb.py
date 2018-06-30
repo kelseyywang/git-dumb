@@ -4,27 +4,17 @@ import argparse
 from os import listdir, makedirs
 from os.path import isfile, join, basename, exists, isdir
 
-SAVE_FREQ = 600 # Time between saving different versions. Default: 10 min
-TIMEOUT = 3600 # Time until program automatically terminates. Default: 1 hr
-VERSION_DIRNAME = "versions" # Folder containing version copies
-FILES_TO_EXCLUDE = [] # File names of files to explicitly not copy. Default: none.
-IGNORES = [".gitignore"] # File names of files containing file names to explicitly not copy
-
-# To ignore the ignores in the ignore files ;)
-def exclude_ignores():
-    for ignore_file in IGNORES:
-        if isfile(ignore_file):
-            with open(ignore_file) as file:
-                for line in file:
-                    line = line.strip()
-                    if len(line) > 0 and line[0] != '#':
-                        FILES_TO_EXCLUDE.append(line)
+SAVE_FREQ = 1800
+TIMEOUT = 10800
+VERSION_DIRNAME = "versions"
+FILES_TO_EXCLUDE = [] # File names of files to explicitly not copy. By default: none
+IGNORES = [".gitignore"] # File names of files containing file names to explicitly not copy. By default: .gitignore
 
 # Args you can modify include save frequency, timeout amount, and version directory name
 def apply_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--freq", help="Amount of time between saving new versions (in sec). Default: 600 (10 min)")
-    parser.add_argument("--timeout", help="Amount of time to run until git-dumb terminates (in sec). Default: 3600 (1 hr)")
+    parser.add_argument("--freq", help="Amount of time between saving new versions (in sec). Default: 1800 (30 min)")
+    parser.add_argument("--timeout", help="Amount of time to run until git-dumb terminates (in sec). Default: 10800 (3 hrs)")
     parser.add_argument("--dir", help="Name of directory where all versions are stored. Default: \"versions\"")
     args = parser.parse_args()
     if args.freq:
@@ -36,6 +26,16 @@ def apply_args():
     if args.dir:
         global VERSION_DIRNAME
         VERSION_DIRNAME = args.dir
+
+# To ignore the ignores in the ignore files ;)
+def exclude_ignores():
+    for ignore_file in IGNORES:
+        if isfile(ignore_file):
+            with open(ignore_file) as file:
+                for line in file:
+                    line = line.strip()
+                    if len(line) > 0 and line[0] != '#':
+                        FILES_TO_EXCLUDE.append(line)
 
 def get_date_str():
     now = datetime.datetime.now()
