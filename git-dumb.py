@@ -78,9 +78,9 @@ def copy_stuff(directory, ignores_from_ignore_file):
     # Copy files
     for file_path in file_list:
         now = datetime.datetime.now()
-        file = open(file_path, "r")
+        file = open(file_path, "rb")
         version_filename = join(VERSION_DIRNAME, date_str, file_path)
-        version_file = open(version_filename, "w+")
+        version_file = open(version_filename, "wb+")
         version_file.write(file.read())
         file.close()
         version_file.close()
