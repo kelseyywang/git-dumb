@@ -4,9 +4,9 @@ Have you ever accidentally merged away your diligent local changes and cried tea
 Or, are you tired of people stereotyping you as smart just because you're a programmer??  
 If so, it's time to **git dumb**.
 
-### Introducing git-dumb, probably the best personal version control system you'll ever find.
+### Introducing git-dumb, the best personal version control system you'll ever find.
 
-It simply backs up different versions of files and nested directories in any directory you use it in. It's designed for coNvEniEnCe: the backups are plopped straight into your same directory and are organized by the time they that they're captured. Did that not make sense? Just try it! I bet it's great for use on sketchy hackathon projects, when you're _moving fast and breaking things_, or when you're just feeling particularly dumb. ¯\\\_(ツ)\_/¯
+It simply backs up different versions of files and directories on your computer. It's designed for coNvEniEnCe: no matter what directory you plot git-dumb in, it will copy everything important in that directory. Didn't make sense? Just try it! I bet it's great for use on sketchy hackathon projects, when you're _moving fast and breaking things_, or when you're just feeling particularly dumb about git. ¯\\\_(ツ)\_/¯
 
 ### How to use:
 
